@@ -1,1 +1,13 @@
 *.lock
+/IMDB_API_Accessor/obj/Debug/netcoreapp3.1/IMDB_API_Accessor.csprojAssemblyReference.cache
+/.vs/TVShowManager/v16/Server/sqlite3/storage.ide
+/.vs/TVShowManager/v16/Server/sqlite3/storage.ide-shm
+/.vs/TVShowManager/v16/Server/sqlite3/storage.ide-wal
+/TVMonitorGUI/obj/Debug/MainWindow.baml
+/TVMonitorGUI/obj/Debug/TVMonitorGUI.csprojAssemblyReference.cache
+/TVMonitorGUI/obj/Debug/TVMonitorGUI_MarkupCompile.cache
+/.vs
+/IMDB_API_Accessor/obj
+/IMDB_API_Accessor/bin
+/TVMonitorUI/obj
+/TVMonitorUI/bin
