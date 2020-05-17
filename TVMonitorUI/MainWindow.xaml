@@ -7,6 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <ToolBar Name="MyToolbar" VerticalAlignment="Top" >
+            <Menu>
+                <MenuItem Header="File">
+                    <MenuItem Header="Load File" Click="LoadFile_Click"/>
+                </MenuItem>
+            </Menu>
+            <Button Background="LightSkyBlue" Content="Exit" Name="ExitButton" Click="ExitButton_Click" />
+        </ToolBar>
+        <DataGrid ItemsSource="{Binding Source=Processor.MainTable}"  AutoGenerateColumns="True">
+        </DataGrid>
     </Grid>
 </Window>

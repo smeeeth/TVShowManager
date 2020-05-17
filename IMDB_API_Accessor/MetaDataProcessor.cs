@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IMDB_API_Accessor
 {
-    class MetaDataProcessor
+    public class MetaDataProcessor
     {
         Dictionary<string, int> GenreColumnMap = new Dictionary<string, int>();
         int GenreColumnCount = 0;
