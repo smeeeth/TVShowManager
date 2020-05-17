@@ -45,6 +45,16 @@ namespace IMDB_API_Accessor
             Console.ReadLine();
         }
 
+        List<MetaData> GetManyByIds(List<string> ids)
+        {
+            List<MetaData> metas = new List<MetaData>();
+            foreach(string id in ids)
+            {
+                metas.Add(GetByID(id));
+            }
+            return metas;
+        }
+
         static MetaData GetByID(string id)
         {
             Console.WriteLine("Sending Request...");
