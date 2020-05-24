@@ -7,35 +7,35 @@ namespace IMDB_API_Accessor
 {
     public class MetaData
     {
-        public string Id;
-        public string Title;
-        public int StartYear;
-        public int EndYear;
-        public int NumEpisodes;
-        public int AverageRunningTimeMinutes;
-        public decimal Rating;
-        public long RatingCount;
-        public WayToWatch WayToWatch;
-        public String[] Genres;
-        public String Certificate;
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public int StartYear { get; set; }
+        public int EndYear { get; set; }
+        public int NumEpisodes { get; set; }
+        public int AverageRunningTimeMinutes { get; set; }
+        public decimal Rating { get; set; }
+        public long RatingCount { get; set; }
+        public WayToWatch WayToWatch { get; set; }
+        public String[] Genres { get; set; }
+        public String Certificate { get; set; }
     }
 
     public class WayToWatch
     {
-        public String Id;
-        public List<OptionGroup> Groups;
+        public String Id { get; set; }
+        public List<OptionGroup> Groups { get; set; }
     }
 
     public class OptionGroup
     {
-        public String DisplayName;
-        public List<WatchOption> Options;
+        public String DisplayName { get; set; }
+        public List<WatchOption> Options { get; set; }
     }
 
     public class WatchOption
     {
-        public String Primary;
-        public String Secondary;
-        public String UriLink;
+        public String Primary { get; set; }
+        public String Secondary { get; set; }
+        public String UriLink { get; set; }
     }
 }

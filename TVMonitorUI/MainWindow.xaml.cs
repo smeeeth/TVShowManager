@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace TVMonitorUI
     public partial class MainWindow : Window
     {
         public MetaDataProcessor Processor;
+        public ObservableCollection<MetaData> MetaDatas = new ObservableCollection<MetaData>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,18 +43,17 @@ namespace TVMonitorUI
             Processor = new MetaDataProcessor();
             Processor.ProcessMetaDatas(new List<MetaData> { meta });
 
+            MetaDatas.Add(meta);
 
-            MainWindow..MyGrid = Processor.MainTable.Select(x => new { Value = x }).ToList();
-            dgvSelectedNode.Show();
+            DataGrid.ItemsSource = MetaDatas;
 
         }
 
         private void LoadFile_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Application.Current.Shutdown();
         }
 
-        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        private void Exit_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
         }

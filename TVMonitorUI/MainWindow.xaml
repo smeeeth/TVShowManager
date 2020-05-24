@@ -6,16 +6,18 @@
         xmlns:local="clr-namespace:TVMonitorUI"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <ToolBar Name="MyToolbar" VerticalAlignment="Top" >
-            <Menu>
-                <MenuItem Header="File">
-                    <MenuItem Header="Load File" Click="LoadFile_Click"/>
-                </MenuItem>
-            </Menu>
-            <Button Background="LightSkyBlue" Content="Exit" Name="ExitButton" Click="ExitButton_Click" />
-        </ToolBar>
-        <DataGrid ItemsSource="{Binding Source=Processor.MainTable}"  AutoGenerateColumns="True">
-        </DataGrid>
-    </Grid>
+    <Window.Resources>
+        <CollectionViewSource x:Key="ItemCollectionViewSource" CollectionViewType="ListCollectionView"/>
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Load File" Click="LoadFile_Click"/>
+                <MenuItem Header="Exit" Click="Exit_Click"/>
+            </MenuItem>
+        </Menu>
+        <DataGrid x:Name="DataGrid" DockPanel.Dock="Bottom" AutoGenerateColumns="True" CanUserAddRows="False" IsReadOnly="True"
+                  ItemsSource="{Binding MetaDatas}" DataContext="{Binding}"/>
+    </DockPanel>
+    
 </Window>
