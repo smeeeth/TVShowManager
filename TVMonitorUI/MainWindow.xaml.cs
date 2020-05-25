@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Common;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using APIAccessor;
 
 namespace TVMonitorUI
@@ -32,25 +24,18 @@ namespace TVMonitorUI
 
         private Dictionary<string, DataGridCheckBoxColumn> WayToWatchCols = new Dictionary<string, DataGridCheckBoxColumn>();
         private DataGridColumn ColumnBeforeWayToWatch;
-        private int NextWayToWatchColumnIndex = 12;
-
-        private TVMetaData m;
 
         public MainWindow()
         {
             InitializeComponent();
             GenerateColumns();
-
-            TVMetaData data = APIAccessor.Program.GetByID("asdfasdf");
-            m = data;
-
-            Console.WriteLine(data);
-
-            Console.ReadLine();
-
+            
+            //Bind to item source
             DataGrid.ItemsSource = MetaDatas;
             MetaDatas.CollectionChanged += TableChanged;
 
+            //Get test data (id does not matter)
+            TVMetaData data = APIAccessor.Program.GetByID("asdfasdf");
             MetaDatas.Add(data);
         }
 
@@ -70,16 +55,22 @@ namespace TVMonitorUI
             ColumnBeforeWayToWatch = DataGrid.Columns[11];
         }
 
+        /// <summary>
+        /// Changes table when rows are added/removed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TableChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.NewItems != null) {
-                foreach(TVMetaData meta in e.NewItems)
+            if (e.NewItems != null)
+            {
+                foreach (TVMetaData meta in e.NewItems)
                 {
-                    foreach(string genre in meta.Genres)
+                    foreach (string genre in meta.Genres)
                     {
                         CheckForGenre(genre);
                     }
-                    foreach(OptionGroup way in meta.WayToWatch.Groups)
+                    foreach (OptionGroup way in meta.WayToWatch.Groups)
                     {
                         foreach (WatchOption option in way.Options)
                         {
@@ -88,17 +79,39 @@ namespace TVMonitorUI
                     }
                 }
             }
+            
+            if (e.OldItems != null)
+            {
+                foreach(TVMetaData meta in e.OldItems)
+                {
+                    ///TODO: Remove columns with no more entries exist
+                }
+            }
         }
 
+        /// <summary>
+        /// Load "Db" file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoadFile_Click(object sender, RoutedEventArgs e)
         {
-            MetaDatas.Add(m);
         }
 
+        /// <summary>
+        /// Close app
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
         }
+
+        /// <summary>
+        /// Check if column for this Genre already exists
+        /// </summary>
+        /// <param name="genre"></param>
         private void CheckForGenre(String genre)
         {
             if (!GenreCols.ContainsKey(genre))
@@ -107,16 +120,22 @@ namespace TVMonitorUI
                 col.Header = genre;
                 var binding = new Binding();
                 binding.Mode = BindingMode.OneWay;
+                binding.Converter = new GenreCheckBoxConverter(genre);
                 col.Binding = binding;
+
                 col.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
 
                 GenreCols.Add(genre, col);
 
                 //Add to the end of the "Genre" stretch of columns
-                DataGrid.Columns.Insert((DataGrid.Columns.IndexOf(ColumnBeforeGenre)+GenreCols.Count), col);
+                DataGrid.Columns.Insert((DataGrid.Columns.IndexOf(ColumnBeforeGenre) + GenreCols.Count), col);
             }
         }
 
+        /// <summary>
+        /// Check if column for this WayToWatch already exists
+        /// </summary>
+        /// <param name="wayToWatch"></param>
         private void CheckForWaysToWatch(String wayToWatch)
         {
             if (!WayToWatchCols.ContainsKey(wayToWatch))
@@ -125,6 +144,7 @@ namespace TVMonitorUI
                 col.Header = wayToWatch;
                 var binding = new Binding();
                 binding.Mode = BindingMode.OneWay;
+                binding.Converter = new WayToWatchCheckBoxConverter(wayToWatch);
                 col.Binding = binding;
                 col.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
 
@@ -133,7 +153,70 @@ namespace TVMonitorUI
                 //Add to end of the "Way to Watch" stretch of columns
                 DataGrid.Columns.Insert((DataGrid.Columns.IndexOf(ColumnBeforeWayToWatch) + WayToWatchCols.Count), col);
             }
+        }
 
+        /// <summary>
+        /// Checks if given row contains the genre for this column
+        /// </summary>
+        public class GenreCheckBoxConverter : IValueConverter
+        {
+            private string Genre;
+
+            public GenreCheckBoxConverter(string genre)
+            {
+                Genre = genre;
+            }
+
+            public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            {
+                if (value != null && value is TVMetaData)
+                {
+                    TVMetaData meta = (TVMetaData)value;
+                    if (meta.Genres.Contains(Genre))
+                        return true;
+                }
+                return false;
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Checks if given row contains the way to watch for this column
+        /// </summary>
+        public class WayToWatchCheckBoxConverter : IValueConverter
+        {
+            private string WayToWatch;
+
+            public WayToWatchCheckBoxConverter(string wayToWatch)
+            {
+                WayToWatch = wayToWatch;
+            }
+
+            public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            {
+                if (value != null && value is TVMetaData)
+                {
+                    TVMetaData meta = (TVMetaData)value;
+                    foreach (OptionGroup way in meta.WayToWatch.Groups)
+                    {
+                        foreach (WatchOption option in way.Options)
+                        {
+                            if (option.Primary.Equals(WayToWatch))
+                                return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
