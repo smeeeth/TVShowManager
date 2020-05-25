@@ -42,6 +42,9 @@ namespace TVMonitorUI
             //MetaDatas.Add(data);
         }
 
+        /// <summary>
+        /// Creates columns based on ColumnNames
+        /// </summary>
         public void GenerateColumns()
         {
             foreach (string name in ColumnNames)
@@ -119,6 +122,11 @@ namespace TVMonitorUI
             System.Windows.Application.Current.Shutdown();
         }
 
+        /// <summary>
+        /// Generic make Text Column function
+        /// </summary>
+        /// <param name="header"></param>
+        /// <returns></returns>
         static private DataGridTextColumn CreateTextColumn(string header)
         {
             DataGridTextColumn col = new DataGridTextColumn();
@@ -241,6 +249,11 @@ namespace TVMonitorUI
             }
         }
 
+        /// <summary>
+        /// Gets selected row
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <returns></returns>
         private static TVMetaData GetSender(object sender)
         {
             //Get the clicked MenuItem
@@ -259,6 +272,11 @@ namespace TVMonitorUI
             return markWatched;
         }
 
+        /// <summary>
+        /// Updates shows info from API
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Update(object sender, RoutedEventArgs e)
         {
             var meta = GetSender(sender);
@@ -268,20 +286,28 @@ namespace TVMonitorUI
 
         }
 
+        /// <summary>
+        /// Mark the show watched
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MarkWatched(object sender, RoutedEventArgs e)
         {
             var meta = GetSender(sender);
             meta.Watched = true;
         }
 
+        /// <summary>
+        /// Show messagebox with show details
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SeeDetails(object sender, RoutedEventArgs e)
         {
             var meta = GetSender(sender);
 
-
-            Reader.Write(MetaDatas.ToList<TVMetaData>());
-
             //Show message box with details
+            MessageBox.Show("Title: " + meta.Title);
         }
     }
 }
