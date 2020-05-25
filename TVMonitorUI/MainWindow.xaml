@@ -17,24 +17,6 @@
             </MenuItem>
         </Menu>
         <DataGrid x:Name="DataGrid" DockPanel.Dock="Bottom" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
-                  ItemsSource="{Binding MetaDatas}" DataContext="{Binding}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="1*"/>
-                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="2*"/>
-                <DataGridTextColumn Header="StartYear" Binding="{Binding StartYear}" Width="1*"/>
-                <DataGridTextColumn Header="EndYear" Binding="{Binding EndYear}" Width="1*"/>
-                <DataGridTextColumn Header="NumEpisodes" Binding="{Binding NumEpisodes}" Width="1*"/>
-                <DataGridTextColumn Header="TotalSeasons" Binding="{Binding TotalSeasons}" Width="1*"/>
-                <DataGridTextColumn Header="Index" Binding="{Binding AverageRunningTimeMinutes}" Width="1*"/>
-                <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="1*"/>
-                <DataGridTextColumn Header="RatingCount" Binding="{Binding RatingCount}" Width="1*"/>
-                <DataGridTextColumn Header="WayToWatch" Binding="{Binding WayToWatch}" Width="1*"/>
-                <DataGridTextColumn Header="Genres" Binding="{Binding Genres}" Width="1*"/>
-                <DataGridTextColumn Header="Certificate" Binding="{Binding Certificate}" Width="1*"/>
-                <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="1*"/>
-                <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="1*"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                  ItemsSource="{Binding MetaDatas}" DataContext="{Binding}"/>
     </DockPanel>
-    
 </Window>
