@@ -18,7 +18,6 @@ namespace APIAccessor
 
             IMDBMetaData imdbDBData = new IMDBMetaData(textIMDB);
 
-
             //var textMovieDB = MovieDBRequest(id);
             var textMovieDB = System.IO.File.ReadAllText("MovieDB_ApiResponse.txt");
 
@@ -26,60 +25,9 @@ namespace APIAccessor
 
             MovieDBMetaData movieDBData = new MovieDBMetaData(textMovieDB);
 
-            TVMetaData metaData = GetByID(id);
+            TVMetaData metaData = APIManager.GetByID(id);
 
             Console.ReadLine();
-        }
-
-        static List<IMDBMetaData> GetManyByIds(List<string> ids)
-        {
-            List<IMDBMetaData> metas = new List<IMDBMetaData>();
-            foreach (string id in ids)
-            {
-                metas.Add(GetByIDIMDB(id));
-            }
-            return metas;
-        }
-
-        public static TVMetaData GetByID(string id)
-        {
-            IMDBMetaData imdb = GetByIDIMDB(id);
-            MovieDBMetaData movieDB = GetByIdMovieDB(id);
-
-            return new TVMetaData(imdb, movieDB);
-        }
-
-        static string IMDBSendRequest(string id)
-        {
-            Console.WriteLine("Sending Request...");
-            var client = new RestClient($"https://imdb8.p.rapidapi.com/title/get-meta-data?region=US&ids={id}");
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("x-rapidapi-host", "imdb8.p.rapidapi.com");
-            request.AddHeader("x-rapidapi-key", "53ea5ed115mshbf90e8763756573p196d74jsn92f297750860");
-            //var text = client.Execute(request).Content;
-            var text = System.IO.File.ReadAllText("IMDB_ApiResponse.txt");
-            return text;
-        }
-
-        static IMDBMetaData GetByIDIMDB(string id)
-        {
-            return new IMDBMetaData(IMDBSendRequest(id));
-        }
-
-        static string MovieDBRequest(string id)
-        {
-            var client = new RestClient($"https://movie-database-imdb-alternative.p.rapidapi.com/?i={id}&r=json");
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("x-rapidapi-host", "movie-database-imdb-alternative.p.rapidapi.com");
-            request.AddHeader("x-rapidapi-key", "53ea5ed115mshbf90e8763756573p196d74jsn92f297750860");
-            //var text = client.Execute(request).Content;
-            var text = System.IO.File.ReadAllText("MovieDB_ApiResponse.txt");
-            return text;
-        }
-
-        static MovieDBMetaData GetByIdMovieDB(string id)
-        {
-            return new MovieDBMetaData(MovieDBRequest(id));
         }
     }
         

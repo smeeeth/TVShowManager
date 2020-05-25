@@ -35,7 +35,7 @@ namespace TVMonitorUI
             MetaDatas.CollectionChanged += TableChanged;
 
             //Get test data (id does not matter)
-            TVMetaData data = APIAccessor.Program.GetByID("asdfasdf");
+            TVMetaData data = APIManager.GetByID("tt0306414");
             MetaDatas.Add(data);
         }
 

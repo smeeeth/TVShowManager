@@ -68,6 +68,13 @@ namespace APIAccessor
 
         public static String GetValue(String name, String JSON, out int startIndex, out int endIndex)
         {
+            if (!JSON.Contains(name)) //null check, in case value is not found
+            {
+                startIndex = 0;
+                endIndex = 0;
+                return null;
+            }
+
             name = $"\"{name}\"";
             startIndex = JSON.IndexOf(name);
 
