@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using APIAccessor;
+using TVMonitorFS;
 
 namespace TVMonitorUI
 {
@@ -25,6 +26,8 @@ namespace TVMonitorUI
         private Dictionary<string, DataGridCheckBoxColumn> WayToWatchCols = new Dictionary<string, DataGridCheckBoxColumn>();
         private DataGridColumn ColumnBeforeWayToWatch;
 
+        private DBFileReader Reader = new DBFileReader("TVMonitorFile.tv");
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,7 +39,7 @@ namespace TVMonitorUI
 
             //Get test data (id does not matter)
             TVMetaData data = APIManager.GetByID("tt0306414");
-            MetaDatas.Add(data);
+            //MetaDatas.Add(data);
         }
 
         public void GenerateColumns()
@@ -98,6 +101,12 @@ namespace TVMonitorUI
         /// <param name="e"></param>
         private void LoadFile_Click(object sender, RoutedEventArgs e)
         {
+            MetaDatas.Clear();
+            List<TVMetaData> metas = Reader.Read();
+            foreach (TVMetaData thisMeta in metas)
+            {
+                MetaDatas.Add(thisMeta);
+            }
         }
 
         /// <summary>
@@ -256,6 +265,7 @@ namespace TVMonitorUI
 
             //Send get request for id meta.Id
             //update metadata object
+
         }
 
         private void MarkWatched(object sender, RoutedEventArgs e)
@@ -267,6 +277,9 @@ namespace TVMonitorUI
         private void SeeDetails(object sender, RoutedEventArgs e)
         {
             var meta = GetSender(sender);
+
+
+            Reader.Write(MetaDatas.ToList<TVMetaData>());
 
             //Show message box with details
         }

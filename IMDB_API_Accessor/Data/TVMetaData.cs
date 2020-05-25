@@ -4,6 +4,10 @@ namespace APIAccessor
 {
     public class TVMetaData : INotifyPropertyChanged
     {
+        private TVMetaData()
+        {
+
+        }
         public TVMetaData(IMDBMetaData imdb, MovieDBMetaData movieDB, bool watched = false)
         {
             Id = imdb.Id;
