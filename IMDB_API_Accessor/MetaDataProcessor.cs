@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IMDB_API_Accessor
+namespace APIAccessor
 {
     public class MetaDataProcessor
     {
@@ -18,10 +18,10 @@ namespace IMDB_API_Accessor
         {
 
         }
-        public void ProcessMetaDatas(List<MetaData> metadatas)
+        public void ProcessMetaDatas(List<IMDBMetaData> metadatas)
         {
             //process genres
-            foreach (MetaData meta in metadatas)
+            foreach (IMDBMetaData meta in metadatas)
             {
                 foreach (string genre in meta.Genres)
                 {
@@ -33,9 +33,9 @@ namespace IMDB_API_Accessor
             }
 
             //process ways to watch
-            foreach (MetaData meta in metadatas)
+            foreach (IMDBMetaData meta in metadatas)
             {
-                WayToWatch watch = meta.WayToWatch;
+                WaysToWatch watch = meta.WayToWatch;
 
                 foreach(OptionGroup group in watch.Groups)
                 {
@@ -88,7 +88,7 @@ namespace IMDB_API_Accessor
 
             //add data
             int rowNum = 1;
-            foreach(MetaData meta in metadatas)
+            foreach(IMDBMetaData meta in metadatas)
             {
                 count = 0;
 

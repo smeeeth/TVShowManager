@@ -2,132 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IMDB_API_Accessor
+namespace APIAccessor
 {
-    public class JSONInterpreter
+    public static class JSONInterpreter
     {
-        public static MetaData ReadMetaData(String text)
-        {
-            int startIndex = 0, endIndex = 0;
-
-            var objectName = "title";
-            var titleObject = GetObjectJSON(objectName, text, out startIndex, out endIndex);
-            text = text.Substring(endIndex);
-
-            objectName = "ratings";
-            var ratingsObject = GetObjectJSON(objectName, text, out startIndex, out endIndex);
-            text = text.Substring(endIndex);
-
-            objectName = "metacritic";
-            var metacriticObject = GetObjectJSON(objectName, text, out startIndex, out endIndex);
-            text = text.Substring(endIndex);
-
-            objectName = "releaseDate";
-            var releaseDate = GetValue(objectName, text, out startIndex, out endIndex);
-            text = text.Substring(endIndex);
-
-            objectName = "popularity";
-            var popularity = GetObjectJSON(objectName, text, out startIndex, out endIndex);
-            text = text.Substring(endIndex);
-
-            objectName = "waysToWatch";
-            var waysToWatch = GetObjectJSON(objectName, text, out startIndex, out endIndex);
-            text = text.Substring(endIndex);
-
-            objectName = "genres";
-            var genres = GetArrayJSON(objectName, text, out startIndex, out endIndex);
-            text = text.Substring(endIndex);
-
-            var genreArray = genres.Split(",");
-            for (int i = 0; i < genreArray.Length; i++)
-            {
-                genreArray[i] = Clean(genreArray[i]);
-            }
-
-            objectName = "certificate";
-            var certificate = GetValue(objectName, text, out startIndex, out endIndex);
-            text = text.Substring(endIndex);
-
-            //Get values
-            //TV Show
-            String imdbID = GetValue("id", titleObject);
-
-            String title = GetValue("title", titleObject);
-
-            String startYear = GetValue("seriesStartYear", titleObject);
-
-            String endYear = GetValue("seriesEndYear", titleObject);
-
-            String numEpisodes = GetValue("numberOfEpisodes", titleObject);
-
-            String runningTime = GetValue("runningTimeInMinutes", titleObject);
-
-            //Rating
-            String rating = GetValue("rating", ratingsObject);
-            String ratingCount = GetValue("ratingCount", ratingsObject);
-
-            //WaysToWatch
-            WayToWatch ways = new WayToWatch();
-            ways.Id = GetValue("id", waysToWatch);
-            List<OptionGroup> optionGroups = new List<OptionGroup>();
-
-            //Streaming options
-            String options = GetArrayJSON("optionGroups", waysToWatch);
-            options = RemoveArrayBrackets(options);
-
-            while (options.Length > 0) //loop until it breaks. Exception driven development
-            {
-                string thisOption = GetFirstObjectFrom(options, 0);
-                options = options.Substring(thisOption.Length);
-
-                OptionGroup group = new OptionGroup();
-                group.DisplayName = GetValue("displayName", thisOption);
-
-                String watchOptions = GetArrayJSON("watchOptions", thisOption);
-                watchOptions = RemoveArrayBrackets(watchOptions);
-                List<WatchOption> watchOptionsList = new List<WatchOption>();
-
-                while (watchOptions.Length > 0)
-                {
-                    string thisWatchOption = GetFirstObjectFrom(watchOptions, 0);
-                    watchOptions = watchOptions.Substring(thisWatchOption.Length);
-
-                    var watchOption = new WatchOption();
-                    watchOption.Primary = GetValue("primaryText", thisWatchOption);
-                    watchOption.Secondary = GetValue("secondaryText", thisWatchOption);
-
-                    var linkJSON = GetObjectJSON("link", thisWatchOption);
-
-                    watchOption.UriLink = GetValue("uri", linkJSON);
-
-                    watchOptionsList.Add(watchOption);
-                }
-
-                group.Options = watchOptionsList;
-                optionGroups.Add(group);
-            }
-
-            ways.Groups = optionGroups;
-
-            MetaData metadata = new MetaData()
-            {
-                Id = imdbID,
-                Title = title,
-                StartYear = Int32.Parse(startYear),
-                EndYear = Int32.Parse(endYear),
-                NumEpisodes = Int32.Parse(numEpisodes),
-                AverageRunningTimeMinutes = Int32.Parse(runningTime),
-                Rating = Decimal.Parse(rating),
-                RatingCount = Int64.Parse(ratingCount),
-                WayToWatch = ways,
-                Genres = genreArray,
-                Certificate = certificate
-            };
-
-            return metadata;
-
-        }
-
         public static string GetArrayJSON(String name, String JSON)
         {
             return GetObjectJSON(name, JSON, '[', ']');
@@ -199,7 +77,7 @@ namespace IMDB_API_Accessor
 
             Char[] JSONArray = JSON.ToCharArray();
 
-            for (int i = index; i < JSONArray.Length && JSONArray[i] != ','; i++)
+            for (int i = index; i < JSONArray.Length && JSONArray[i] != ',' ;i++)
             {
                 thisValue += JSONArray[i];
             }

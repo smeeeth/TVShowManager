@@ -6,9 +6,4 @@
   <PropertyGroup>
     <ActiveDebugProfile>IMDB_API_Accessor</ActiveDebugProfile>
   </PropertyGroup>
-  <ItemGroup>
-    <None Update="DataSet1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
 </Project>

@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using IMDB_API_Accessor;
+using APIAccessor;
 
 namespace TVMonitorUI
 {
@@ -23,27 +23,19 @@ namespace TVMonitorUI
     public partial class MainWindow : Window
     {
         public MetaDataProcessor Processor;
-        public ObservableCollection<MetaData> MetaDatas = new ObservableCollection<MetaData>();
+        public ObservableCollection<TVMetaData> MetaDatas = new ObservableCollection<TVMetaData>();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            var text = System.IO.File.ReadAllText("C:/Users/erics/Workspace/IMDB_API_Accessor/IMDB_API_Accessor/TextFile302.txt");
+            TVMetaData data = APIAccessor.Program.GetByID("asdfasdf");
 
-            var num = DateTime.Now.Millisecond;
-            System.IO.File.WriteAllText($"C:/Users/erics/Workspace/IMDB_API_Accessor/IMDB_API_Accessor/TextFile{num}.txt", text);
-
-            MetaData meta = JSONInterpreter.ReadMetaData(text);
-
-            Console.WriteLine(meta);
+            Console.WriteLine(data);
 
             Console.ReadLine();
 
-            Processor = new MetaDataProcessor();
-            Processor.ProcessMetaDatas(new List<MetaData> { meta });
-
-            MetaDatas.Add(meta);
+            MetaDatas.Add(data);
 
             DataGrid.ItemsSource = MetaDatas;
 

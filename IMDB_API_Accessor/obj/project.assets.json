@@ -5693,9 +5693,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\erics\\Workspace\\TVShowManager\\IMDB_API_Accessor\\IMDB_API_Accessor.csproj",
-      "projectName": "IMDB_API_Accessor",
-      "projectPath": "C:\\Users\\erics\\Workspace\\TVShowManager\\IMDB_API_Accessor\\IMDB_API_Accessor.csproj",
+      "projectUniqueName": "C:\\Users\\erics\\Workspace\\TVShowManager\\IMDB_API_Accessor\\APIAccessor.csproj",
+      "projectName": "APIAccessor",
+      "projectPath": "C:\\Users\\erics\\Workspace\\TVShowManager\\IMDB_API_Accessor\\APIAccessor.csproj",
       "packagesPath": "C:\\Users\\erics\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\erics\\Workspace\\TVShowManager\\IMDB_API_Accessor\\obj\\",
       "projectStyle": "PackageReference",
