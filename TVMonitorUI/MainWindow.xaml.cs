@@ -41,14 +41,9 @@ namespace TVMonitorUI
 
         public void GenerateColumns()
         {
-            foreach (string str in ColumnNames)
+            foreach (string name in ColumnNames)
             {
-                DataGridTextColumn col = new DataGridTextColumn();
-                col.Header = str;
-                var binding = new Binding(str);
-                binding.Mode = BindingMode.OneWay;
-                col.Binding = binding;
-                col.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+                var col = CreateTextColumn(name);
                 DataGrid.Columns.Add(col);
             }
             ColumnBeforeGenre = DataGrid.Columns[8];
@@ -108,6 +103,34 @@ namespace TVMonitorUI
             System.Windows.Application.Current.Shutdown();
         }
 
+        static private DataGridTextColumn CreateTextColumn(string header)
+        {
+            DataGridTextColumn col = new DataGridTextColumn();
+            col.Header = header;
+            var binding = new Binding(header);
+            binding.Mode = BindingMode.OneWay;
+            col.Binding = binding;
+            col.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            return col;
+        }
+
+        /// <summary>
+        /// Generic make Checkable Column function
+        /// </summary>
+        /// <param name="header"></param>
+        /// <returns></returns>
+        static private DataGridCheckBoxColumn CreateCheckableColumn(string header, IValueConverter converter)
+        {
+            DataGridCheckBoxColumn col = new DataGridCheckBoxColumn();
+            col.Header = header;
+            var binding = new Binding();
+            binding.Mode = BindingMode.OneWay;
+            binding.Converter = converter;
+            col.Binding = binding;
+            col.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            return col;
+        }
+
         /// <summary>
         /// Check if column for this Genre already exists
         /// </summary>
@@ -116,17 +139,8 @@ namespace TVMonitorUI
         {
             if (!GenreCols.ContainsKey(genre))
             {
-                DataGridCheckBoxColumn col = new DataGridCheckBoxColumn();
-                col.Header = genre;
-                var binding = new Binding();
-                binding.Mode = BindingMode.OneWay;
-                binding.Converter = new GenreCheckBoxConverter(genre);
-                col.Binding = binding;
-
-                col.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-
+                DataGridCheckBoxColumn col = CreateCheckableColumn(genre, new GenreCheckBoxConverter(genre));
                 GenreCols.Add(genre, col);
-
                 //Add to the end of the "Genre" stretch of columns
                 DataGrid.Columns.Insert((DataGrid.Columns.IndexOf(ColumnBeforeGenre) + GenreCols.Count), col);
             }
@@ -140,16 +154,8 @@ namespace TVMonitorUI
         {
             if (!WayToWatchCols.ContainsKey(wayToWatch))
             {
-                DataGridCheckBoxColumn col = new DataGridCheckBoxColumn();
-                col.Header = wayToWatch;
-                var binding = new Binding();
-                binding.Mode = BindingMode.OneWay;
-                binding.Converter = new WayToWatchCheckBoxConverter(wayToWatch);
-                col.Binding = binding;
-                col.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-
+                DataGridCheckBoxColumn col = CreateCheckableColumn(wayToWatch, new WayToWatchCheckBoxConverter(wayToWatch));
                 WayToWatchCols.Add(wayToWatch, col);
-
                 //Add to end of the "Way to Watch" stretch of columns
                 DataGrid.Columns.Insert((DataGrid.Columns.IndexOf(ColumnBeforeWayToWatch) + WayToWatchCols.Count), col);
             }
