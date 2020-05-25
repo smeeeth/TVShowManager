@@ -72,6 +72,7 @@ namespace TVMonitorUI
                             CheckForWaysToWatch(option.Primary);
                         }
                     }
+                    meta.PropertyChanged += RowChanged;
                 }
             }
             
@@ -80,8 +81,14 @@ namespace TVMonitorUI
                 foreach(TVMetaData meta in e.OldItems)
                 {
                     ///TODO: Remove columns with no more entries exist
+                    meta.PropertyChanged -= RowChanged;
                 }
             }
+        }
+
+        private void RowChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -223,6 +230,45 @@ namespace TVMonitorUI
             {
                 throw new NotImplementedException();
             }
+        }
+
+        private static TVMetaData GetSender(object sender)
+        {
+            //Get the clicked MenuItem
+            MenuItem menuItem = (MenuItem)sender;
+
+            //Get the ContextMenu to which the menuItem belongs
+            var contextMenu = (ContextMenu)menuItem.Parent;
+
+            //Find the placementTarget
+            var item = (DataGrid)contextMenu.PlacementTarget;
+
+            //Get the underlying item, that you cast to your object that is bound
+            //to the DataGrid (and has subject and state as property)
+            var markWatched = (TVMetaData)item.SelectedCells[0].Item;
+
+            return markWatched;
+        }
+
+        private void Update(object sender, RoutedEventArgs e)
+        {
+            var meta = GetSender(sender);
+
+            //Send get request for id meta.Id
+            //update metadata object
+        }
+
+        private void MarkWatched(object sender, RoutedEventArgs e)
+        {
+            var meta = GetSender(sender);
+            meta.Watched = true;
+        }
+
+        private void SeeDetails(object sender, RoutedEventArgs e)
+        {
+            var meta = GetSender(sender);
+
+            //Show message box with details
         }
     }
 }

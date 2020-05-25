@@ -17,6 +17,14 @@
             </MenuItem>
         </Menu>
         <DataGrid x:Name="DataGrid" DockPanel.Dock="Bottom" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
-                  ItemsSource="{Binding MetaDatas}" DataContext="{Binding}"/>
+                  ItemsSource="{Binding MetaDatas}" DataContext="{Binding}">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Update from API" Click="Update" />
+                    <MenuItem Header="Mark as Watched"  Click="MarkWatched"/>
+                    <MenuItem Header="See Details" Click="SeeDetails"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
     </DockPanel>
 </Window>
