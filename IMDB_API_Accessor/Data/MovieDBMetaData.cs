@@ -4,7 +4,7 @@ using System.Text;
 
 namespace APIAccessor
 {
-    public class MovieDBMetaData : APIObject
+    public class MovieDBMetaData : APIMetaData
     {
         public MovieDBMetaData(string json)
         {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace APIAccessor
 {
-    public class IMDBMetaData : APIObject
+    public class IMDBMetaData : APIMetaData
     {
         public IMDBMetaData(string json)
         {
