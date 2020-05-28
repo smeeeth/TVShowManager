@@ -25,7 +25,7 @@ namespace APIAccessor
 
             MovieDBMetaData movieDBData = new MovieDBMetaData(textMovieDB);
 
-            TVMetaData metaData = APIManager.GetByID(id);
+            TVMetaData metaData = API.APIManager.GetByID(id);
 
             Console.ReadLine();
         }

@@ -7,7 +7,7 @@ namespace APIAccessor.API
 {
     public class API<T> where T : APIMetaData
     {
-        private static bool IsTesting = true;
+        private static bool IsTesting = false;
 
         //Authentication key
         private string AuthKey;
@@ -23,6 +23,7 @@ namespace APIAccessor.API
 
         public string SendRequest(string id, string testFile = null) {
             Console.WriteLine("Sending Request...");
+
             var client = new RestClient(string.Format(BaseAddress, id));
             var request = new RestRequest(Method.GET);
             var headerPretext = new Uri(BaseAddress).Host;
@@ -30,11 +31,11 @@ namespace APIAccessor.API
             request.AddHeader("x-rapidapi-key", $"{AuthKey}");
 
             string text = "";
-            if (!IsTesting)
+            if (!APIManager.IsTesting)
             {
                 text = client.Execute(request).Content;
             }
-            else if (testFile == null)
+            else if (testFile != null)
             {
                 text = System.IO.File.ReadAllText(testFile);
             }

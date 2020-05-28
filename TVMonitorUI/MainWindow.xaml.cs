@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using APIAccessor;
+using APIAccessor.API;
 using TVMonitorFS;
 
 namespace TVMonitorUI
