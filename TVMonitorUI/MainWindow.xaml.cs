@@ -32,14 +32,14 @@ namespace TVMonitorUI
         {
             InitializeComponent();
             GenerateColumns();
-            
+
             //Bind to item source
             DataGrid.ItemsSource = MetaDatas;
             MetaDatas.CollectionChanged += TableChanged;
 
             //Get test data (id does not matter)
             TVMetaData data = APIManager.GetByID("tt0306414");
-            //MetaDatas.Add(data);
+            MetaDatas.Add(data);
         }
 
         /// <summary>

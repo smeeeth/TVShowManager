@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using APIAccessor;
 
-namespace APIAccessor
+namespace TVMonitorFS
 {
-    public interface APIMetaData
+    class APICallLog<T> where T:TVMetaData
     {
     }
 }
