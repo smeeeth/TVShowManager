@@ -5,7 +5,7 @@ using APIAccessor;
 
 namespace TVMonitorFS
 {
-    public class APICallLog<T> where T:TVMetaData
+    class APICallLog<T> where T:TVMetaData
     {
     }
 }

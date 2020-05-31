@@ -8,7 +8,7 @@ namespace APIAccessor.API
     public class IMDBAPI : APIWrapper<IMDBMetaData>
     {
         public IMDBAPI(String authKey) : 
-            base(authKey, "https://imdb8.p.rapidapi.com/title/get-meta-data?region=US&ids={0}")
+            base(authKey, "https://movie-database-imdb-alternative.p.rapidapi.com/?i={id}&r=json")
         {
         }
 
