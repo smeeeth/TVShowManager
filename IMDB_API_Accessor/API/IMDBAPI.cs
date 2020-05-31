@@ -5,10 +5,14 @@ using System.Text;
 
 namespace APIAccessor.API
 {
-    public class IMDBAPI : APIWrapper<IMDBMetaData>
+    public interface UsesIMDBId
+    {
+
+    }
+    public class IMDBAPI : APIWrapper<IMDBMetaData>, UsesIMDBId
     {
         public IMDBAPI(String authKey) : 
-            base(authKey, "https://movie-database-imdb-alternative.p.rapidapi.com/?i={id}&r=json")
+            base(authKey, "https://imdb8.p.rapidapi.com/title/get-meta-data?region=US&ids={0}")
         {
         }
 

@@ -5,17 +5,15 @@ using System.Text;
 
 namespace APIAccessor.API
 {
-    public class API<T> where T : APIMetaData
+    public class RapidAPI<T> where T : APIMetaData
     {
-        private static bool IsTesting = true;
-
         //Authentication key
         private string AuthKey;
 
         //Formatted string of base address
         private string BaseAddress;
 
-        public API(string authKey, string baseAddress)
+        public RapidAPI(string authKey, string baseAddress)
         {
             AuthKey = authKey;
             BaseAddress = baseAddress;
@@ -30,11 +28,11 @@ namespace APIAccessor.API
             request.AddHeader("x-rapidapi-key", $"{AuthKey}");
 
             string text = "";
-            if (!IsTesting)
+            if (!APIManager.IsTesting)
             {
                 text = client.Execute(request).Content;
             }
-            else if (testFile == null)
+            else if (testFile != null)
             {
                 text = System.IO.File.ReadAllText(testFile);
             }

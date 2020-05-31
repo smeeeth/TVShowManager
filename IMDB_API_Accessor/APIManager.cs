@@ -1,13 +1,17 @@
-﻿using RestSharp;
+﻿using APIAccessor.API;
+using RestSharp;
 using System;
 
 namespace APIAccessor
 {
     public static class APIManager
     {
-        const bool IsTesting = true;
+        public const bool IsTesting = false;
 
         private static string APIKEY = "53ea5ed115mshbf90e8763756573p196d74jsn92f297750860";
+
+        private static IMDBAPI ImdbApi = new IMDBAPI(APIKEY);
+        private static MovieDBAPI MovieDbApi = new MovieDBAPI(APIKEY);
 
         public static IMDBMetaData GetByIDIMDB(string id)
         {
@@ -59,8 +63,8 @@ namespace APIAccessor
 
         public static TVMetaData GetByID(string id)
         {
-            IMDBMetaData imdb = GetByIDIMDB(id);
-            MovieDBMetaData movieDB = GetByIdMovieDB(id);
+            IMDBMetaData imdb = ImdbApi.GetMetadata(id);
+            MovieDBMetaData movieDB = MovieDbApi.GetMetadata(id);
 
             return new TVMetaData(imdb, movieDB);
         }
