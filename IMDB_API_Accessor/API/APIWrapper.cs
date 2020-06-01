@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using APIAccessor.Data;
 
 namespace APIAccessor.API
 {
     public abstract class APIWrapper<T> where T : APIMetaData
     {
-        protected RapidAPI<T> APIService;
+        protected RapidAPI APIService;
         public APIWrapper(string authKey, String baseUrl)
         {
-            APIService = new RapidAPI<T>(authKey, baseUrl);
+            APIService = new RapidAPI(authKey, baseUrl);
         }
 
         public abstract T GetMetadata(String id);

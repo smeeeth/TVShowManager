@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using APIAccessor;
 
-namespace TVMonitorFS
+namespace APIAccessor.FS
 {
-    class APICallLog<T> where T:TVMetaData
+    class APILogger
     {
     }
 }

@@ -1,8 +1,5 @@
-﻿using Nancy.Json;
-using RestSharp;
-using System;
-using System.Collections.Generic;
-
+﻿using System;
+using APIAccessor.Data;
 namespace APIAccessor
 {
     public class Program

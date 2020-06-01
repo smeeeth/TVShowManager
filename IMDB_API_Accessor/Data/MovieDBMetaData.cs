@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using APIAccessor.API;
 
-namespace APIAccessor
+namespace APIAccessor.Data
 {
     public class MovieDBMetaData : APIMetaData
     {
@@ -59,5 +58,10 @@ namespace APIAccessor
         public string Country { get; set; }
         public string Awards { get; set; }
         public int TotalSeasons { get; set; }
+
+        public override string ToString()
+        {
+            return $"{{Released: {Released}, Director: {Director}, Actors: {Actors}, Plot: {Plot}, Language: {Language}, Country: {Country}, Awards: {Awards}, TotalSeasons: {TotalSeasons}}}";
+        }
     }
 }

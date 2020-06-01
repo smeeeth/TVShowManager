@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace APIAccessor
+namespace APIAccessor.Data
 {
     public class TVMetaData : INotifyPropertyChanged
     {
@@ -262,6 +262,18 @@ namespace APIAccessor
                 PropertyChangedEventArgs e = new PropertyChangedEventArgs(propertyName);
                 PropertyChanged(this, e);
             }
+        }
+
+        public override string ToString()
+        {
+            var str = $"{{Id: {Id}, Title: {Title}, StartYear: {StartYear}, EndYear: {EndYear}, NumEpisodes: {NumEpisodes}, AverageRunningTimeMinutes: {AverageRunningTimeMinutes}, Rating: {Rating}, RatingCount: {RatingCount}, WayToWatch: {WayToWatch}, Genres:";
+            foreach (string genre in Genres)
+            {
+                str += $" {genre}";
+            }
+            str += $"{{Certificate: {Certificate}}}";
+            str += $"{{Released: {Released}, Director: {Director}, Actors: {Actors}, Plot: {Plot}, Language: {Language}, Country: {Country}, Awards: {Awards}, TotalSeasons: {TotalSeasons}}}";
+            return str;
         }
     }
 }
