@@ -1,5 +1,6 @@
 ﻿using System;
 using APIAccessor.Data;
+using APIAccessor.FS;
 
 namespace APIAccessor.API
 {
@@ -10,7 +11,7 @@ namespace APIAccessor.API
     public class IMDBAPI : APIWrapper<IMDBMetaData>, UsesIMDBId
     {
         public IMDBAPI(String authKey) : 
-            base(authKey, "https://imdb8.p.rapidapi.com/title/get-meta-data?region=US&ids={0}")
+            base(authKey, "https://imdb8.p.rapidapi.com/title/get-meta-data?region=US&ids={0}", new APICallLog<IMDBMetaData>(APILogConfig.DEFAULT_LOG_DIRECTORY, authKey))
         {
         }
 

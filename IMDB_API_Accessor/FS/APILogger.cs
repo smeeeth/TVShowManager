@@ -4,7 +4,8 @@ using System.Text;
 
 namespace APIAccessor.FS
 {
-    class APILogger
+    static class APILogger
     {
+
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using RestSharp;
+using APIAccessor.Data;
 using APIAccessor.FS;
 
 namespace APIAccessor.API
 {
-    public class RapidAPI
+    public class RapidAPI<T> where T : APIMetaData
     {
         //Authentication key
         private string AuthKey;
@@ -13,14 +14,13 @@ namespace APIAccessor.API
         private string BaseAddress;
 
         //Logger
-        private static APICallLog Logger;
+        public APICallLog<T> Logger { get; set; }
 
-        public RapidAPI(string authKey, string baseAddress)
+        public RapidAPI(string authKey, string baseAddress, APICallLog<T> logger)
         {
             AuthKey = authKey;
             BaseAddress = baseAddress;
-
-            Logger = new APICallLog("", authKey);
+            Logger = logger;
         }
 
         public string SendRequest(string id, string testFile = null) {
@@ -34,7 +34,7 @@ namespace APIAccessor.API
             if (!APIManager.IsTesting)
             {
                 var response = client.Execute(request);
-                Logger.Log(client, request, response);
+                Logger.Log(client, request, response); 
                 text = response.Content;
             }
             else if (testFile != null)
