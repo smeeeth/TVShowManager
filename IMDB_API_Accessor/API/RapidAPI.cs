@@ -1,7 +1,7 @@
 ﻿using System;
 using RestSharp;
 using APIAccessor.Data;
-using APIAccessor.FS;
+using System.Linq;
 
 namespace APIAccessor.API
 {
@@ -13,14 +13,13 @@ namespace APIAccessor.API
         //Formatted string of base address
         private string BaseAddress;
 
-        //Logger
-        public APICallLog<T> Logger { get; set; }
+        public int MaxCallsPerMonth { get; private set; }
+        public int CallsThisMonth { get; private set; }
 
-        public RapidAPI(string authKey, string baseAddress, APICallLog<T> logger)
+        public RapidAPI(string authKey, string baseAddress)
         {
             AuthKey = authKey;
             BaseAddress = baseAddress;
-            Logger = logger;
         }
 
         public string SendRequest(string id, string testFile = null) {
@@ -34,8 +33,10 @@ namespace APIAccessor.API
             if (!APIManager.IsTesting)
             {
                 var response = client.Execute(request);
-                Logger.Log(client, request, response); 
                 text = response.Content;
+
+                MaxCallsPerMonth = Int32.Parse(response.Headers.ToList().Find(x => x.Name == "x-ratelimit-requests-limit").Value.ToString());
+                CallsThisMonth = Int32.Parse(response.Headers.ToList().Find(x => x.Name == "x-ratelimit-requests-remaining").Value.ToString());
             }
             else if (testFile != null)
             {
