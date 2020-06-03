@@ -16,15 +16,32 @@
                 <MenuItem Header="Exit" Click="Exit_Click"/>
             </MenuItem>
         </Menu>
-        <DataGrid x:Name="DataGrid" DockPanel.Dock="Bottom" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="MovieDBAPI"/>
+                    <Label Content="500"/>
+                    <Label Content="/"/>
+                    <Label Content="500"/>
+                </StackPanel>
+                <Label Content="|"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="IMDBAPI"/>
+                    <Label Content="500"/>
+                    <Label Content="/"/>
+                    <Label Content="500"/>
+                </StackPanel>
+            </StackPanel>
+            <DataGrid x:Name="DataGrid" DockPanel.Dock="Bottom" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
                   ItemsSource="{Binding MetaDatas}" DataContext="{Binding}">
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Update from API" Click="Update" />
-                    <MenuItem Header="Mark as Watched"  Click="MarkWatched"/>
-                    <MenuItem Header="See Details" Click="SeeDetails"/>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-        </DataGrid>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Update from API" Click="Update" />
+                        <MenuItem Header="Mark as Watched"  Click="MarkWatched"/>
+                        <MenuItem Header="See Details" Click="SeeDetails"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+        </StackPanel>
     </DockPanel>
 </Window>

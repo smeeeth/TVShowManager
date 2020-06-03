@@ -35,12 +35,14 @@ namespace APIAccessor.API
                 var response = client.Execute(request);
                 text = response.Content;
 
-                MaxCallsPerMonth = Int32.Parse(response.Headers.ToList().Find(x => x.Name == "x-ratelimit-requests-limit").Value.ToString());
-                CallsThisMonth = Int32.Parse(response.Headers.ToList().Find(x => x.Name == "x-ratelimit-requests-remaining").Value.ToString());
+                MaxCallsPerMonth = Int32.Parse(response.Headers.ToList().Find(x => x.Name == "X-RateLimit-Requests-Limit").Value.ToString());
+                CallsThisMonth = Int32.Parse(response.Headers.ToList().Find(x => x.Name == "X-RateLimit-Requests-Remaining").Value.ToString());
             }
             else if (testFile != null)
             {
                 text = System.IO.File.ReadAllText(testFile);
+                MaxCallsPerMonth = 500;
+                CallsThisMonth = 400;
             }
 
             return text;
