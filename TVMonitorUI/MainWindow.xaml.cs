@@ -112,6 +112,21 @@ namespace TVMonitorUI
                 NotifyPropertyChanged();
             }
         }
+
+        private string _ApiKey = APIManager.APIKEY;
+        public string ApiKey
+        {
+            get
+            {
+                return _ApiKey;
+            }
+            set
+            {
+                _ApiKey = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void NotifyPropertyChanged(String propertyName = "")
@@ -147,11 +162,13 @@ namespace TVMonitorUI
 
                 }
             };
-
-
+          
             //Get test data (id does not matter)
             TVMetaData data = APIManager.GetByID("tt0306414");
             MetaDatas.Add(data);
+
+
+            NotifyPropertyChanged();
         }
 
         /// <summary>
@@ -223,13 +240,22 @@ namespace TVMonitorUI
                 MetaDatas.Add(thisMeta);
             }
         }
+       private void EnterApiKey_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new InputDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                APIManager.APIKEY = dialog.ResponseText;
+                ApiKey = APIManager.APIKEY;
+            }
+        }
 
-        /// <summary>
-        /// Close app
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+                /// <summary>
+                /// Close app
+                /// </summary>
+                /// <param name="sender"></param>
+                /// <param name="e"></param>
+                private void Exit_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
         }

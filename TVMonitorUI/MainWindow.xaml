@@ -14,11 +14,16 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="Load File" Click="LoadFile_Click"/>
+                <MenuItem Header="Enter Rapid API Key" Click="EnterApiKey_Click"/>
                 <MenuItem Header="Exit" Click="Exit_Click"/>
             </MenuItem>
         </Menu>
         <StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Label Content="RapidAPI Key:"/>
+                    <Label Content="{Binding ApiKey, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"/>
+                </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Label Content="{Binding IMDBName, UpdateSourceTrigger=PropertyChanged}"/>
                     <Label Content="{Binding IMDBCallsRemaining, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding IMDBCallsRemaining, Converter={StaticResource colorConverter}}"/>

@@ -7,9 +7,16 @@ namespace APIAccessor
 {
     public static class APIManager
     {
-        public const bool IsTesting = false;
+        public const bool IsTesting = true;
 
-        private static string APIKEY = "53ea5ed115mshbf90e8763756573p196d74jsn92f297750860";
+        private static string _APIKEY = "53ea5ed115mshbf90e8763756573p196d74jsn92f297750860";
+        public static string APIKEY {
+            get { return _APIKEY; } 
+            set { _APIKEY = value;
+                ImdbApi = new IMDBAPI(_APIKEY);
+                MovieDbApi = new MovieDBAPI(_APIKEY);
+            } }
+
 
         private static IMDBAPI ImdbApi = new IMDBAPI(APIKEY);
         private static MovieDBAPI MovieDbApi = new MovieDBAPI(APIKEY);
