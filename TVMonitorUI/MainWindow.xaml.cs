@@ -12,6 +12,7 @@ using APIAccessor;
 using APIAccessor.API;
 using APIAccessor.Data;
 using APIAccessor.FS;
+using Microsoft.Win32;
 
 namespace TVMonitorUI
 {
@@ -167,7 +168,6 @@ namespace TVMonitorUI
             TVMetaData data = APIManager.GetByID("tt0306414");
             MetaDatas.Add(data);
 
-
             NotifyPropertyChanged();
         }
 
@@ -233,11 +233,22 @@ namespace TVMonitorUI
         /// <param name="e"></param>
         private void LoadFile_Click(object sender, RoutedEventArgs e)
         {
-            MetaDatas.Clear();
-            List<TVMetaData> metas = Reader.Read();
-            foreach (TVMetaData thisMeta in metas)
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.DefaultExt = ".tv";
+            dlg.Filter = "TVShowManager DB Files (*.tv)|*.tv";
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
             {
-                MetaDatas.Add(thisMeta);
+                // Open document 
+                string filename = dlg.FileName;
+                Reader = new DBFileReader(filename);
+                MetaDatas.Clear();
+                List<TVMetaData> metas = Reader.Read();
+                foreach (TVMetaData thisMeta in metas)
+                {
+                    MetaDatas.Add(thisMeta);
+                }
             }
         }
        private void EnterApiKey_Click(object sender, RoutedEventArgs e)
