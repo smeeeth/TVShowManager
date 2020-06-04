@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using APIAccessor;
 using APIAccessor.API;
 using APIAccessor.Data;
@@ -419,6 +420,28 @@ namespace TVMonitorUI
 
             //Show message box with details
             MessageBox.Show("Title: " + meta.Title);
+        }
+    }
+    public class RGColorConverter : IValueConverter
+    {
+        private static int LOW_REMAINING_THRESHOLD = 20;
+        private static Brush NORMAL_BRUSH = Brushes.Green;
+        private static Brush LOW_BRUSH = Brushes.Red;
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+                return null;
+
+            var remainingCalls = (int)value;
+            if (remainingCalls > LOW_REMAINING_THRESHOLD)
+                return NORMAL_BRUSH;
+            else
+                return LOW_BRUSH;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }
