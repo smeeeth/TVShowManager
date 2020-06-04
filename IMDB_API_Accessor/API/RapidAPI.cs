@@ -2,6 +2,7 @@
 using RestSharp;
 using APIAccessor.Data;
 using System.Linq;
+using APIAccessor.FS;
 
 namespace APIAccessor.API
 {
@@ -15,6 +16,8 @@ namespace APIAccessor.API
 
         public string ApiName { get; private set; }
 
+        private APILogger Logger;
+
         public int MaxCallsPerMonth { get; private set; }
         public int CallsRemaining { get; private set; }
 
@@ -23,6 +26,7 @@ namespace APIAccessor.API
             AuthKey = authKey;
             BaseAddress = baseAddress;
             ApiName = apiName;
+            Logger = new APILogger(apiName);
         }
 
         public string SendRequest(string id, string testFile = null) {
@@ -37,6 +41,7 @@ namespace APIAccessor.API
             {
                 var response = client.Execute(request);
                 text = response.Content;
+                Logger.Log(client, request, response);
 
                 MaxCallsPerMonth = Int32.Parse(response.Headers.ToList().Find(x => x.Name == "X-RateLimit-Requests-Limit").Value.ToString());
                 CallsRemaining = Int32.Parse(response.Headers.ToList().Find(x => x.Name == "X-RateLimit-Requests-Remaining").Value.ToString());
