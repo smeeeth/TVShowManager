@@ -8,6 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
         <CollectionViewSource x:Key="ItemCollectionViewSource" CollectionViewType="ListCollectionView"/>
+        <local:RGColorConverter x:Key="colorConverter"/>
     </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
@@ -16,15 +17,32 @@
                 <MenuItem Header="Exit" Click="Exit_Click"/>
             </MenuItem>
         </Menu>
-        <DataGrid x:Name="DataGrid" DockPanel.Dock="Bottom" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="{Binding IMDBName, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="{Binding IMDBCallsRemaining, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding IMDBCallsRemaining, Converter={StaticResource colorConverter}}"/>
+                    <Label Content="/" Foreground="{Binding IMDBCallsRemaining, Converter={StaticResource colorConverter}}"/>
+                    <Label Content="{Binding IMDBMaxCalls, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding IMDBCallsRemaining, Converter={StaticResource colorConverter}}"/>
+                </StackPanel>
+                <Label Content="|"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="{Binding MovieDBName, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="{Binding MovieDBCallsRemaining, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding MovieDBCallsRemaining, Converter={StaticResource colorConverter}}"/>
+                    <Label Content="/" Foreground="{Binding MovieDBCallsRemaining, Converter={StaticResource colorConverter}}"/>
+                    <Label Content="{Binding MovieDBMaxCalls, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding MovieDBCallsRemaining, Converter={StaticResource colorConverter}}"/>
+                </StackPanel>
+            </StackPanel>
+            <DataGrid x:Name="DataGrid" DockPanel.Dock="Bottom" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
                   ItemsSource="{Binding MetaDatas}" DataContext="{Binding}">
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Update from API" Click="Update" />
-                    <MenuItem Header="Mark as Watched"  Click="MarkWatched"/>
-                    <MenuItem Header="See Details" Click="SeeDetails"/>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-        </DataGrid>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Update from API" Click="Update" />
+                        <MenuItem Header="Mark as Watched"  Click="MarkWatched"/>
+                        <MenuItem Header="See Details" Click="SeeDetails"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+        </StackPanel>
     </DockPanel>
 </Window>

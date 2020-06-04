@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IMDB_API_Accessor\APIAccessor.csproj" />
-    <ProjectReference Include="..\TVMonitorFS\TVMonitorFS.csproj" />
   </ItemGroup>
 
 </Project>

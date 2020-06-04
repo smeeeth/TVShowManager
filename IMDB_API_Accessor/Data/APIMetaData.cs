@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace APIAccessor
+﻿namespace APIAccessor.Data
 {
-    interface APIMetaData
+    public interface APIMetaData
     {
     }
 }

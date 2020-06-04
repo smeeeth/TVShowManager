@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using APIAccessor;
-using TVMonitorFS;
+using APIAccessor.API;
+using APIAccessor.Data;
+using APIAccessor.FS;
 
 namespace TVMonitorUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private static List<String> ColumnNames = new List<String> { "Id", "Title", "StartYear", "EndYear", "TotalSeasons", "NumEpisodes", "AverageRunningTimeMinutes", "Rating", "RatingCount", "Language", "Country", "Certificate" };
 
@@ -28,18 +32,126 @@ namespace TVMonitorUI
 
         private DBFileReader Reader = new DBFileReader("TVMonitorFile.tv");
 
+        private string _IMDBName;
+        public string IMDBName
+        {
+            get
+            {
+                return _IMDBName;
+            }
+            set
+            {
+                _IMDBName = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private int _IMDBMaxCalls;
+        public int IMDBMaxCalls
+        {
+            get
+            {
+                return _IMDBMaxCalls;
+            }
+            set
+            {
+                _IMDBMaxCalls = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private int _IMDBCallsRemaining;
+        public int IMDBCallsRemaining
+        {
+            get
+            {
+                return _IMDBCallsRemaining;
+            }
+            set
+            {
+                _IMDBCallsRemaining = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
+        private string _MovieDBName;
+        public string MovieDBName
+        {
+            get
+            {
+                return _MovieDBName;
+            }
+            set
+            {
+                _MovieDBName = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private int _MovieDBMaxCalls;
+        public int MovieDBMaxCalls
+        {
+            get
+            {
+                return _MovieDBMaxCalls;
+            }
+            set
+            {
+                _MovieDBMaxCalls = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private int _MovieDBCallsRemaining;
+        public int MovieDBCallsRemaining
+        {
+            get
+            {
+                return _MovieDBCallsRemaining;
+            }
+            set
+            {
+                _MovieDBCallsRemaining = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void NotifyPropertyChanged(String propertyName = "")
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public MainWindow()
         {
             InitializeComponent();
             GenerateColumns();
-            
+
             //Bind to item source
             DataGrid.ItemsSource = MetaDatas;
             MetaDatas.CollectionChanged += TableChanged;
 
+            this.DataContext = this;
+
+            IMDBName = nameof(IMDBAPI);
+            MovieDBName = nameof(MovieDBAPI);
+
+            APIManager.RequestMade += (sender, e) => {
+                if (e.APIName.Equals(IMDBName))
+                {
+                    IMDBMaxCalls = e.MaxCalls;
+                    IMDBCallsRemaining = e.CallsRemaining;
+                } else if (e.APIName.Equals(MovieDBName))
+                {
+                    MovieDBMaxCalls = e.MaxCalls;
+                    MovieDBCallsRemaining = e.CallsRemaining;
+
+                }
+            };
+
+
             //Get test data (id does not matter)
             TVMetaData data = APIManager.GetByID("tt0306414");
-            //MetaDatas.Add(data);
+            MetaDatas.Add(data);
         }
 
         /// <summary>
@@ -308,6 +420,28 @@ namespace TVMonitorUI
 
             //Show message box with details
             MessageBox.Show("Title: " + meta.Title);
+        }
+    }
+    public class RGColorConverter : IValueConverter
+    {
+        private static int LOW_REMAINING_THRESHOLD = 20;
+        private static Brush NORMAL_BRUSH = Brushes.Green;
+        private static Brush LOW_BRUSH = Brushes.Red;
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+                return null;
+
+            var remainingCalls = (int)value;
+            if (remainingCalls > LOW_REMAINING_THRESHOLD)
+                return NORMAL_BRUSH;
+            else
+                return LOW_BRUSH;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

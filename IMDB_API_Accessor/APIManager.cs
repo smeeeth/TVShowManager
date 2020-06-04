@@ -1,13 +1,18 @@
-﻿using RestSharp;
+﻿using APIAccessor.API;
+using APIAccessor.Data;
+using RestSharp;
 using System;
 
 namespace APIAccessor
 {
     public static class APIManager
     {
-        const bool IsTesting = true;
+        public const bool IsTesting = false;
 
         private static string APIKEY = "53ea5ed115mshbf90e8763756573p196d74jsn92f297750860";
+
+        private static IMDBAPI ImdbApi = new IMDBAPI(APIKEY);
+        private static MovieDBAPI MovieDbApi = new MovieDBAPI(APIKEY);
 
         public static IMDBMetaData GetByIDIMDB(string id)
         {
@@ -33,6 +38,7 @@ namespace APIAccessor
             
             return text;
         }
+
         public static MovieDBMetaData GetByIdMovieDB(string id)
         {
             return new MovieDBMetaData(MovieDBRequest(id));
@@ -59,10 +65,36 @@ namespace APIAccessor
 
         public static TVMetaData GetByID(string id)
         {
-            IMDBMetaData imdb = GetByIDIMDB(id);
-            MovieDBMetaData movieDB = GetByIdMovieDB(id);
+            IMDBMetaData imdb = ImdbApi.GetMetadata(id);
+            MovieDBMetaData movieDB = MovieDbApi.GetMetadata(id);
 
             return new TVMetaData(imdb, movieDB);
         }
+
+
+        public static event EventHandler<MyEventArgs> RequestMade = delegate { };
+
+        internal static void NotifyCallMade<T>(RapidAPI<T> apiCalledTo) where T : APIMetaData
+        {
+            RequestMade(apiCalledTo, new MyEventArgs(apiCalledTo.ApiName, apiCalledTo.MaxCallsPerMonth, apiCalledTo.CallsRemaining));
+        }
     }
+
+    //Define event argument you want to send while raising event.
+    public class MyEventArgs : EventArgs
+    {
+        public string APIName { get; set; }
+        public int MaxCalls { get; set; }
+        public int CallsRemaining { get; set; }
+
+
+        public MyEventArgs(string apiName, int maxCalls, int callsRemaining)
+        {
+            APIName = apiName;
+            MaxCalls = maxCalls;
+            CallsRemaining = callsRemaining;
+        }
+    }
+
+
 }

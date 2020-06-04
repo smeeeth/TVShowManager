@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace APIAccessor
+namespace APIAccessor.API
 {
     public static class JSONInterpreter
     {

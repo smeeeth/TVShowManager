@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using APIAccessor.API;
 
-namespace APIAccessor
+namespace APIAccessor.Data
 {
     public class IMDBMetaData : APIMetaData
     {
@@ -133,18 +132,49 @@ namespace APIAccessor
         public WaysToWatch WayToWatch { get; set; }
         public string[] Genres { get; set; }
         public string Certificate { get; set; }
+
+        public override string ToString()
+        {
+            var str = $"{{Id: {Id}, Title: {Title}, StartYear: {StartYear}, EndYear: {EndYear}, NumEpisodes: {NumEpisodes}, AverageRunningTimeMinutes: {AverageRunningTimeMinutes}, Rating: {Rating}, RatingCount: {RatingCount}, WayToWatch: {WayToWatch}, Genres:";
+            foreach (String genre in Genres)
+            {
+                str += $" {genre}";
+            }
+            str += $"{{Certificate: {Certificate}}}";
+            return str;
+        }
     }
 
     public class WaysToWatch
     {
         public string Id { get; set; }
         public List<OptionGroup> Groups { get; set; }
+        public override string ToString()
+        {
+            var str = $"{{ Id: {Id}, Groups:";
+            foreach (OptionGroup groups in Groups)
+            {
+                str += $" {groups.ToString()} ,";
+            }
+            str += "}";
+            return str;
+        }
     }
 
     public class OptionGroup
     {
         public string DisplayName { get; set; }
         public List<WatchOption> Options { get; set; }
+        public override string ToString()
+        {
+            var str = $"{{ DisplayName: {DisplayName}, Options:";
+            foreach (WatchOption option in Options)
+            {
+                str += $" {option.ToString()} ,";
+            }
+            str += "}";
+            return str;
+        }
     }
 
     public class WatchOption
@@ -152,5 +182,9 @@ namespace APIAccessor
         public string Primary { get; set; }
         public string Secondary { get; set; }
         public string UriLink { get; set; }
+        public override string ToString()
+        {
+            return $"{{ Primary: {Primary}, Secondary: {Secondary}, UriLink: {UriLink}}}";
+        }
     }
 }

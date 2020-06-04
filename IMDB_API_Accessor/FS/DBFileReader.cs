@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using APIAccessor;
+using APIAccessor.Data;
 
-namespace TVMonitorFS
+namespace APIAccessor.FS
 {
     public class DBFileReader
     {
