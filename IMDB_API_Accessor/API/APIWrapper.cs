@@ -8,9 +8,9 @@ namespace APIAccessor.API
     {
         protected RapidAPI<T> APIService;
 
-        protected APIWrapper(string authKey, String baseUrl)
+        protected APIWrapper(string authKey, String baseUrl, string name)
         {
-            APIService = new RapidAPI<T>(authKey, baseUrl);
+            APIService = new RapidAPI<T>(authKey, baseUrl, name);
         }
 
         public abstract T GetMetadata(String id);

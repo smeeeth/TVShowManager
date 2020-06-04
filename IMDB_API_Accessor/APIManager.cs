@@ -38,6 +38,7 @@ namespace APIAccessor
             
             return text;
         }
+
         public static MovieDBMetaData GetByIdMovieDB(string id)
         {
             return new MovieDBMetaData(MovieDBRequest(id));
@@ -69,5 +70,31 @@ namespace APIAccessor
 
             return new TVMetaData(imdb, movieDB);
         }
+
+
+        public static event EventHandler<MyEventArgs> RequestMade = delegate { };
+
+        internal static void NotifyCallMade<T>(RapidAPI<T> apiCalledTo) where T : APIMetaData
+        {
+            RequestMade(apiCalledTo, new MyEventArgs(apiCalledTo.ApiName, apiCalledTo.MaxCallsPerMonth, apiCalledTo.CallsRemaining));
+        }
     }
+
+    //Define event argument you want to send while raising event.
+    public class MyEventArgs : EventArgs
+    {
+        public string APIName { get; set; }
+        public int MaxCalls { get; set; }
+        public int CallsRemaining { get; set; }
+
+
+        public MyEventArgs(string apiName, int maxCalls, int callsRemaining)
+        {
+            APIName = apiName;
+            MaxCalls = maxCalls;
+            CallsRemaining = callsRemaining;
+        }
+    }
+
+
 }

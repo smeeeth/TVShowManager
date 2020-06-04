@@ -13,13 +13,16 @@ namespace APIAccessor.API
         //Formatted string of base address
         private string BaseAddress;
 
-        public int MaxCallsPerMonth { get; private set; }
-        public int CallsThisMonth { get; private set; }
+        public string ApiName { get; private set; }
 
-        public RapidAPI(string authKey, string baseAddress)
+        public int MaxCallsPerMonth { get; private set; }
+        public int CallsRemaining { get; private set; }
+
+        public RapidAPI(string authKey, string baseAddress, string apiName)
         {
             AuthKey = authKey;
             BaseAddress = baseAddress;
+            ApiName = apiName;
         }
 
         public string SendRequest(string id, string testFile = null) {
@@ -36,14 +39,16 @@ namespace APIAccessor.API
                 text = response.Content;
 
                 MaxCallsPerMonth = Int32.Parse(response.Headers.ToList().Find(x => x.Name == "X-RateLimit-Requests-Limit").Value.ToString());
-                CallsThisMonth = Int32.Parse(response.Headers.ToList().Find(x => x.Name == "X-RateLimit-Requests-Remaining").Value.ToString());
+                CallsRemaining = Int32.Parse(response.Headers.ToList().Find(x => x.Name == "X-RateLimit-Requests-Remaining").Value.ToString());
             }
             else if (testFile != null)
             {
                 text = System.IO.File.ReadAllText(testFile);
                 MaxCallsPerMonth = 500;
-                CallsThisMonth = 400;
+                CallsRemaining = 400;
             }
+
+            APIManager.NotifyCallMade<T>(this);
 
             return text;
         }

@@ -19,17 +19,17 @@
         <StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Label Content="MovieDBAPI"/>
-                    <Label Content="500"/>
+                    <Label Content="{Binding IMDBName, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="{Binding IMDBCallsRemaining, UpdateSourceTrigger=PropertyChanged}"/>
                     <Label Content="/"/>
-                    <Label Content="500"/>
+                    <Label Content="{Binding IMDBMaxCalls, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <Label Content="|"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Label Content="IMDBAPI"/>
-                    <Label Content="500"/>
+                    <Label Content="{Binding MovieDBName, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="{Binding MovieDBCallsRemaining, UpdateSourceTrigger=PropertyChanged}"/>
                     <Label Content="/"/>
-                    <Label Content="500"/>
+                    <Label Content="{Binding MovieDBMaxCalls, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
             </StackPanel>
             <DataGrid x:Name="DataGrid" DockPanel.Dock="Bottom" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"

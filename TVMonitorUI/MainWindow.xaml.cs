@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using APIAccessor;
+using APIAccessor.API;
 using APIAccessor.Data;
 using APIAccessor.FS;
 
@@ -15,7 +17,7 @@ namespace TVMonitorUI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private static List<String> ColumnNames = new List<String> { "Id", "Title", "StartYear", "EndYear", "TotalSeasons", "NumEpisodes", "AverageRunningTimeMinutes", "Rating", "RatingCount", "Language", "Country", "Certificate" };
 
@@ -29,6 +31,95 @@ namespace TVMonitorUI
 
         private DBFileReader Reader = new DBFileReader("TVMonitorFile.tv");
 
+        private string _IMDBName;
+        public string IMDBName
+        {
+            get
+            {
+                return _IMDBName;
+            }
+            set
+            {
+                _IMDBName = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private int _IMDBMaxCalls;
+        public int IMDBMaxCalls
+        {
+            get
+            {
+                return _IMDBMaxCalls;
+            }
+            set
+            {
+                _IMDBMaxCalls = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private int _IMDBCallsRemaining;
+        public int IMDBCallsRemaining
+        {
+            get
+            {
+                return _IMDBCallsRemaining;
+            }
+            set
+            {
+                _IMDBCallsRemaining = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
+        private string _MovieDBName;
+        public string MovieDBName
+        {
+            get
+            {
+                return _MovieDBName;
+            }
+            set
+            {
+                _MovieDBName = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private int _MovieDBMaxCalls;
+        public int MovieDBMaxCalls
+        {
+            get
+            {
+                return _MovieDBMaxCalls;
+            }
+            set
+            {
+                _MovieDBMaxCalls = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private int _MovieDBCallsRemaining;
+        public int MovieDBCallsRemaining
+        {
+            get
+            {
+                return _MovieDBCallsRemaining;
+            }
+            set
+            {
+                _MovieDBCallsRemaining = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void NotifyPropertyChanged(String propertyName = "")
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,6 +128,25 @@ namespace TVMonitorUI
             //Bind to item source
             DataGrid.ItemsSource = MetaDatas;
             MetaDatas.CollectionChanged += TableChanged;
+
+            this.DataContext = this;
+
+            IMDBName = nameof(IMDBAPI);
+            MovieDBName = nameof(MovieDBAPI);
+
+            APIManager.RequestMade += (sender, e) => {
+                if (e.APIName.Equals(IMDBName))
+                {
+                    IMDBMaxCalls = e.MaxCalls;
+                    IMDBCallsRemaining = e.CallsRemaining;
+                } else if (e.APIName.Equals(MovieDBName))
+                {
+                    MovieDBMaxCalls = e.MaxCalls;
+                    MovieDBCallsRemaining = e.CallsRemaining;
+
+                }
+            };
+
 
             //Get test data (id does not matter)
             TVMetaData data = APIManager.GetByID("tt0306414");
