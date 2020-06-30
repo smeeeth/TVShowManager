@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TVMonitorUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="700" Width="1425">
     <Window.Resources>
         <CollectionViewSource x:Key="ItemCollectionViewSource" CollectionViewType="ListCollectionView"/>
         <local:RGColorConverter x:Key="colorConverter"/>
@@ -19,7 +19,7 @@
             </MenuItem>
         </Menu>
         <StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal" >
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Label Content="RapidAPI Key:"/>
                     <Label Content="{Binding ApiKey, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"/>
@@ -38,16 +38,56 @@
                     <Label Content="{Binding MovieDBMaxCalls, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding MovieDBCallsRemaining, Converter={StaticResource colorConverter}}"/>
                 </StackPanel>
             </StackPanel>
-            <DataGrid x:Name="DataGrid" DockPanel.Dock="Bottom" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
-                  ItemsSource="{Binding MetaDatas}" DataContext="{Binding}">
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Update from API" Click="Update" />
-                        <MenuItem Header="Mark as Watched"  Click="MarkWatched"/>
-                        <MenuItem Header="See Details" Click="SeeDetails"/>
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-            </DataGrid>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" MinWidth="200" Margin="5,10,5,0">
+                    <TextBlock Text="Search by ID:" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox Name="IdSearchTxt" Width="Auto"/>
+                    <TextBlock Text="Search by Name:" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox Name="NameSearchTxt" Width="Auto"/>
+                    <DockPanel Margin="5">
+                        <TextBlock Text="Start Year:" Margin="5" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="StartYearTxt" Width="Auto"/>
+                    </DockPanel>
+                    <Slider Name="StartYearSld"  Width="Auto"/>
+                    <DockPanel Margin="5">
+                        <TextBlock Text="End Year:" Margin="5" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="EndYearTxt" Width="Auto"/>
+                    </DockPanel>
+                    <Slider Name="EndYearSld"  Width="Auto"/>
+                    <DockPanel Margin="5">
+                        <TextBlock Text="Max Num of Episodes:" Margin="5" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="NumEpisodesTxt" Width="Auto"/>
+                    </DockPanel>
+                    <Slider Name="NumEpisodesSld"  Width="Auto"/>
+                    <DockPanel Margin="5">
+                        <TextBlock Text="Max Episode Length:" Margin="5" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                        <TextBox Name="MaxEpLengthTxt" Width="Auto"/>
+                    </DockPanel>
+                    <Slider Name="MaxEpLengthSld"  Width="Auto"/>
+                    <DockPanel Margin="5">
+                        <TextBlock Text="Genre:" Margin="5" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                        <ComboBox Name="MaxEpLengthCmb" Width="Auto"/>
+                    </DockPanel>
+                    <DockPanel Margin="5">
+                        <TextBlock Text="Language:" Margin="5" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                        <ComboBox Name="LanguagesCmb" Width="Auto"/>
+                    </DockPanel>
+                    <DockPanel Margin="5">
+                        <TextBlock Text="Country:" Margin="5" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                        <ComboBox Name="CountryCmb" Width="Auto" ItemsSource="{Binding Genres}"/>
+                    </DockPanel>
+                </StackPanel>
+                <DataGrid x:Name="DataGrid" DockPanel.Dock="Bottom" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                  ItemsSource="{Binding MetaDatas}" DataContext="{Binding}" HorizontalAlignment="Stretch">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Update from API" Click="Update" />
+                            <MenuItem Header="Mark as Watched"  Click="MarkWatched"/>
+                            <MenuItem Header="See Details" Click="SeeDetails"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+            </StackPanel>
         </StackPanel>
     </DockPanel>
 </Window>

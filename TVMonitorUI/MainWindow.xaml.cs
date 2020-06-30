@@ -22,13 +22,13 @@ namespace TVMonitorUI
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private static List<String> ColumnNames = new List<String> { "Id", "Title", "StartYear", "EndYear", "TotalSeasons", "NumEpisodes", "AverageRunningTimeMinutes", "Rating", "RatingCount", "Language", "Country", "Certificate" };
-
+        
         private ObservableCollection<TVMetaData> MetaDatas = new ObservableCollection<TVMetaData>();
 
         private Dictionary<string, DataGridCheckBoxColumn> GenreCols = new Dictionary<string, DataGridCheckBoxColumn>();
         private DataGridColumn ColumnBeforeGenre;
 
-        private Dictionary<string, DataGridCheckBoxColumn> WayToWatchCols = new Dictionary<string, DataGridCheckBoxColumn>();
+        private Dictionary<string, DataGridCheckBoxColumn> WaysToWatchCols = new Dictionary<string, DataGridCheckBoxColumn>();
         private DataGridColumn ColumnBeforeWayToWatch;
 
         private DBFileReader Reader = new DBFileReader("TVMonitorFile.tv");
@@ -72,7 +72,6 @@ namespace TVMonitorUI
                 NotifyPropertyChanged();
             }
         }
-
 
         private string _MovieDBName;
         public string MovieDBName
@@ -128,13 +127,22 @@ namespace TVMonitorUI
             }
         }
 
+
+        public int MinStartYear => MetaDatas.ToList().Min(metadata => metadata.StartYear);
+        public int MaxStartYear => MetaDatas.ToList().Max(metadata => metadata.StartYear);
+        public int MinEndYear => MetaDatas.ToList().Min(metadata => metadata.EndYear);
+        public int MaxEndYear => MetaDatas.ToList().Max(metadata => metadata.EndYear);
+        public int MinNumEps => MetaDatas.ToList().Min(metadata => metadata.NumEpisodes);
+        public int MaxNumEps => MetaDatas.ToList().Max(metadata => metadata.NumEpisodes);
+
+        public List<string> Genres => GenreCols.Keys.ToList();
+        public List<string> WaysToWatch => WaysToWatchCols.Keys.ToList();
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void NotifyPropertyChanged(String propertyName = "")
         {
-            var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public MainWindow()
@@ -283,7 +291,6 @@ namespace TVMonitorUI
             var binding = new Binding(header);
             binding.Mode = BindingMode.OneWay;
             col.Binding = binding;
-            col.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
             return col;
         }
 
@@ -300,7 +307,6 @@ namespace TVMonitorUI
             binding.Mode = BindingMode.OneWay;
             binding.Converter = converter;
             col.Binding = binding;
-            col.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
             return col;
         }
 
@@ -325,12 +331,12 @@ namespace TVMonitorUI
         /// <param name="wayToWatch"></param>
         private void CheckForWaysToWatch(String wayToWatch)
         {
-            if (!WayToWatchCols.ContainsKey(wayToWatch))
+            if (!WaysToWatchCols.ContainsKey(wayToWatch))
             {
                 DataGridCheckBoxColumn col = CreateCheckableColumn(wayToWatch, new WayToWatchCheckBoxConverter(wayToWatch));
-                WayToWatchCols.Add(wayToWatch, col);
+                WaysToWatchCols.Add(wayToWatch, col);
                 //Add to end of the "Way to Watch" stretch of columns
-                DataGrid.Columns.Insert((DataGrid.Columns.IndexOf(ColumnBeforeWayToWatch) + WayToWatchCols.Count), col);
+                DataGrid.Columns.Insert((DataGrid.Columns.IndexOf(ColumnBeforeWayToWatch) + WaysToWatchCols.Count), col);
             }
         }
 
@@ -416,9 +422,9 @@ namespace TVMonitorUI
 
             //Get the underlying item, that you cast to your object that is bound
             //to the DataGrid (and has subject and state as property)
-            var markWatched = (TVMetaData)item.SelectedCells[0].Item;
+            var metadata = (TVMetaData)item.SelectedCells[0].Item;
 
-            return markWatched;
+            return metadata;
         }
 
         /// <summary>
